@@ -134,6 +134,14 @@ variable "log_retention" {
   description = "Number of days to retain log events in the specified log group"
 }
 
+variable "capacity_provider_config" {
+  type = object({
+    capacity_provider_arn = string
+  })
+  default     = null
+  description = "Configuration for the capacity provider to use for the Lambda function"
+}
+
 variable "memory_size" {
   type        = number
   default     = null

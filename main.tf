@@ -6,6 +6,7 @@ locals {
   execution_type             = var.subnet_ids == null ? "Basic" : "VPCAccess"
   filename                   = var.filename != null ? var.filename : data.archive_file.dummy.output_path
   image_config               = var.image_config != null ? { create : true } : {}
+  capacity_provider_config   = var.capacity_provider_config != null ? { create : true } : {}
   source_code_hash           = var.source_code_hash != null ? var.source_code_hash : var.filename != null ? filebase64sha256(var.filename) : null
   tracing_config             = var.tracing_config_mode != null ? { create : true } : {}
   vpc_config                 = var.subnet_ids != null ? { create : true } : {}
@@ -169,6 +170,16 @@ resource "aws_lambda_function" "default" {
 
     content {
       target_arn = var.dead_letter_target_arn
+    }
+  }
+
+  dynamic "capacity_provider_config" {
+    for_each = local.capacity_provider_config
+
+    content {
+      lambda_managed_instances_capacity_provider_config {
+        capacity_provider_arn = var.capacity_provider_config.capacity_provider_arn
+      }
     }
   }
 
