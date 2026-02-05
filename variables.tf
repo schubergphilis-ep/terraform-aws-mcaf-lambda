@@ -136,7 +136,9 @@ variable "log_retention" {
 
 variable "capacity_provider_config" {
   type = object({
-    capacity_provider_arn = string
+    capacity_provider_arn                     = string
+    execution_environment_memory_gib_per_vcpu = optional(number)
+    per_execution_environment_max_concurrency = optional(number)
   })
   default     = null
   description = "Configuration for the capacity provider to use for the Lambda function"

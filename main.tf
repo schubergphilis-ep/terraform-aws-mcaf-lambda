@@ -178,8 +178,17 @@ resource "aws_lambda_function" "default" {
 
     content {
       lambda_managed_instances_capacity_provider_config {
-        capacity_provider_arn = var.capacity_provider_config.capacity_provider_arn
+        capacity_provider_arn                     = var.capacity_provider_config.capacity_provider_arn
+        execution_environment_memory_gib_per_vcpu = var.capacity_provider_config.execution_environment_memory_gib_per_vcpu
+        per_execution_environment_max_concurrency = var.capacity_provider_config.per_execution_environment_max_concurrency
       }
+    }
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.capacity_provider_config == null || var.subnet_ids == null
+      error_message = "capacity_provider_config cannot be used with subnet_ids; networking is defined on the Capacity Provider."
     }
   }
 
