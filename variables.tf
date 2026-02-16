@@ -142,6 +142,11 @@ variable "capacity_provider_config" {
   })
   default     = null
   description = "Configuration for the capacity provider to use for the Lambda function"
+
+  validation {
+    condition     = var.capacity_provider_config == null || var.subnet_ids == null
+    error_message = "capacity_provider_config cannot be used with subnet_ids; networking is defined on the Capacity Provider."
+  }
 }
 
 variable "memory_size" {

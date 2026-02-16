@@ -165,14 +165,6 @@ resource "aws_lambda_function" "default" {
   tags                           = aws_cloudwatch_log_group.default.tags
   timeout                        = var.timeout
 
-  dynamic "dead_letter_config" {
-    for_each = local.dead_letter_config
-
-    content {
-      target_arn = var.dead_letter_target_arn
-    }
-  }
-
   dynamic "capacity_provider_config" {
     for_each = local.capacity_provider_config
 
@@ -185,10 +177,11 @@ resource "aws_lambda_function" "default" {
     }
   }
 
-  lifecycle {
-    precondition {
-      condition     = var.capacity_provider_config == null || var.subnet_ids == null
-      error_message = "capacity_provider_config cannot be used with subnet_ids; networking is defined on the Capacity Provider."
+  dynamic "dead_letter_config" {
+    for_each = local.dead_letter_config
+
+    content {
+      target_arn = var.dead_letter_target_arn
     }
   }
 
