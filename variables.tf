@@ -147,6 +147,11 @@ variable "capacity_provider_config" {
     condition     = var.capacity_provider_config == null || var.subnet_ids == null
     error_message = "capacity_provider_config cannot be used with subnet_ids; networking is defined on the Capacity Provider."
   }
+
+  validation {
+    condition     = var.capacity_provider_config == null || var.publish
+    error_message = "When capacity_provider_config is set, publish must be set to true."
+  }
 }
 
 variable "memory_size" {
