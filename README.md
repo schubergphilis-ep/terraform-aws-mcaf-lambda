@@ -15,14 +15,14 @@ Terraform module to create an AWS Lambda function.
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 6.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.25.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_archive"></a> [archive](#provider\_archive) | >= 2.0.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 6.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 6.25.0 |
 
 ## Modules
 
@@ -55,6 +55,7 @@ Terraform module to create an AWS Lambda function.
 | <a name="input_description"></a> [description](#input\_description) | A description of the lambda | `string` | `""` | no |
 | <a name="input_destination_on_failure"></a> [destination\_on\_failure](#input\_destination\_on\_failure) | ARN of the destination resource for failed asynchronous invocations | `string` | `null` | no |
 | <a name="input_destination_on_success"></a> [destination\_on\_success](#input\_destination\_on\_success) | ARN of the destination resource for successful asynchronous invocations | `string` | `null` | no |
+| <a name="input_durable_config"></a> [durable\_config](#input\_durable\_config) | Configuration for durable functions | <pre>object({<br/>    execution_timeout = number<br/>    retention_period  = number<br/>  })</pre> | `null` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | A map of environment variables to assign to the lambda | `map(string)` | `null` | no |
 | <a name="input_ephemeral_storage_size"></a> [ephemeral\_storage\_size](#input\_ephemeral\_storage\_size) | The size of the Lambda function Ephemeral storage | `number` | `null` | no |
 | <a name="input_execution_role"></a> [execution\_role](#input\_execution\_role) | Configuration for lambda execution IAM role | <pre>object({<br/>    additional_policy_arns = optional(set(string), [])<br/>    create_policy          = optional(bool)<br/>    name_prefix            = optional(string)<br/>    path                   = optional(string, "/")<br/>    permissions_boundary   = optional(string)<br/>    policy                 = optional(string)<br/>  })</pre> | `{}` | no |
