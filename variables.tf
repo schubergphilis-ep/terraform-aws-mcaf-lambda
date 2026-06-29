@@ -143,6 +143,26 @@ variable "log_retention" {
   description = "Number of days to retain log events in the specified log group"
 }
 
+variable "capacity_provider_config" {
+  type = object({
+    capacity_provider_arn                     = string
+    execution_environment_memory_gib_per_vcpu = optional(number)
+    per_execution_environment_max_concurrency = optional(number)
+  })
+  default     = null
+  description = "Configuration for the capacity provider to use for the Lambda function"
+
+  validation {
+    condition     = var.capacity_provider_config == null || var.subnet_ids == null
+    error_message = "capacity_provider_config cannot be used with subnet_ids; networking is defined on the Capacity Provider."
+  }
+
+  validation {
+    condition     = var.capacity_provider_config == null || var.publish
+    error_message = "When capacity_provider_config is set, publish must be set to true."
+  }
+}
+
 variable "memory_size" {
   type        = number
   default     = null
