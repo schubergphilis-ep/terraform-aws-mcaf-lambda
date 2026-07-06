@@ -13,7 +13,7 @@ Terraform module to create an AWS Lambda function.
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.9.0 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.0.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 6.25.0 |
 
@@ -49,6 +49,7 @@ Terraform module to create an AWS Lambda function.
 |------|-------------|------|---------|:--------:|
 | <a name="input_name"></a> [name](#input\_name) | The name of the lambda | `string` | n/a | yes |
 | <a name="input_architecture"></a> [architecture](#input\_architecture) | Instruction set architecture of the Lambda function | `string` | `"x86_64"` | no |
+| <a name="input_capacity_provider_config"></a> [capacity\_provider\_config](#input\_capacity\_provider\_config) | Configuration for the capacity provider to use for the Lambda function | <pre>object({<br/>    capacity_provider_arn                     = string<br/>    execution_environment_memory_gib_per_vcpu = optional(number)<br/>    per_execution_environment_max_concurrency = optional(number)<br/>  })</pre> | `null` | no |
 | <a name="input_code_signing_config_arn"></a> [code\_signing\_config\_arn](#input\_code\_signing\_config\_arn) | ARN for a Code Signing Configuration | `string` | `null` | no |
 | <a name="input_create_s3_dummy_object"></a> [create\_s3\_dummy\_object](#input\_create\_s3\_dummy\_object) | Whether or not to create a S3 dummy object | `bool` | `true` | no |
 | <a name="input_dead_letter_target_arn"></a> [dead\_letter\_target\_arn](#input\_dead\_letter\_target\_arn) | The ARN of an SNS topic or SQS queue to notify when an invocation fails | `string` | `null` | no |
