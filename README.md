@@ -28,7 +28,7 @@ Terraform module to create an AWS Lambda function.
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
+| <a name="module_lambda_role"></a> [lambda\_role](#module\_lambda\_role) | schubergphilis-ep/mcaf-role/aws | ~> 0.5.3 |
 
 ## Resources
 

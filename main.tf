@@ -19,7 +19,7 @@ locals {
 module "lambda_role" {
   count = var.execution_role_custom == null ? 1 : 0
 
-  source  = "schubergphilis/mcaf-role/aws"
+  source  = "schubergphilis-ep/mcaf-role/aws"
   version = "~> 0.5.3"
 
   name                  = join("-", compact([var.execution_role.name_prefix, "LambdaRole", var.name]))
