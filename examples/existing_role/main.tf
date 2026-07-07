@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "role" {
-  source  = "schubergphilis/mcaf-role/aws"
+  source  = "schubergphilis-ep/mcaf-role/aws"
   version = "~> 0.4.0"
 
   name                  = "Example"
