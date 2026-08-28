@@ -163,6 +163,17 @@ variable "capacity_provider_config" {
   }
 }
 
+variable "maximum_event_age_in_seconds" {
+  type        = number
+  default     = null
+  description = "Maximum age of a request that Lambda sends to a function for processing, in seconds. If omitted the AWS default of 21600 (6 hours) applies"
+
+  validation {
+    condition     = var.maximum_event_age_in_seconds == null || try(var.maximum_event_age_in_seconds >= 60 && var.maximum_event_age_in_seconds <= 21600, false)
+    error_message = "If provided, \"maximum_event_age_in_seconds\" must be between 60 and 21600."
+  }
+}
+
 variable "memory_size" {
   type        = number
   default     = null

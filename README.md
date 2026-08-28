@@ -67,6 +67,7 @@ Terraform module to create an AWS Lambda function.
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS key used to encrypt the cloudwatch log group and environment variables | `string` | `null` | no |
 | <a name="input_layers"></a> [layers](#input\_layers) | List of Lambda layer ARNs to be used by the Lambda function | `list(string)` | `[]` | no |
 | <a name="input_log_retention"></a> [log\_retention](#input\_log\_retention) | Number of days to retain log events in the specified log group | `number` | `365` | no |
+| <a name="input_maximum_event_age_in_seconds"></a> [maximum\_event\_age\_in\_seconds](#input\_maximum\_event\_age\_in\_seconds) | Maximum age of a request that Lambda sends to a function for processing, in seconds. If omitted the AWS default of 21600 (6 hours) applies | `number` | `null` | no |
 | <a name="input_memory_size"></a> [memory\_size](#input\_memory\_size) | The memory size of the lambda | `number` | `null` | no |
 | <a name="input_package_type"></a> [package\_type](#input\_package\_type) | The Lambda deployment package type. | `string` | `"Zip"` | no |
 | <a name="input_publish"></a> [publish](#input\_publish) | Whether to publish creation/change as new lambda function version | `bool` | `false` | no |
