@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.2.0](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/compare/v4.1.1...v4.2.0) (2026-08-31)
+
+
+### 🚀 Features
+
+* add maximum_event_age_in_seconds ([#4](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/issues/4)) ([2717253](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/commit/2717253a9b546dfc529628473a003702db15c63b))
+
 ## [4.1.1](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/compare/v4.1.0...v4.1.1) (2026-07-07)
 
 
