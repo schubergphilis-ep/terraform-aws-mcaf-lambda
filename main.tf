@@ -1,5 +1,5 @@
 locals {
-  create_event_invoke_config = var.retries != null || var.destination_on_failure != null || var.destination_on_success != null ? { create : true } : {}
+  create_event_invoke_config = var.maximum_event_age_in_seconds != null || var.retries != null || var.destination_on_failure != null || var.destination_on_success != null ? { create : true } : {}
   dead_letter_config         = var.dead_letter_target_arn != null ? { create : true } : {}
   durable_config             = var.durable_config != null ? { create : true } : {}
   environment                = var.environment != null ? { create : true } : {}
@@ -115,9 +115,10 @@ resource "aws_s3_object" "s3_dummy" {
 resource "aws_lambda_function_event_invoke_config" "default" {
   for_each = local.create_event_invoke_config
 
-  region                 = var.region
-  function_name          = aws_lambda_function.default.function_name
-  maximum_retry_attempts = var.retries
+  region                       = var.region
+  function_name                = aws_lambda_function.default.function_name
+  maximum_event_age_in_seconds = var.maximum_event_age_in_seconds
+  maximum_retry_attempts       = var.retries
 
   dynamic "destination_config" {
     for_each = var.destination_on_failure != null || var.destination_on_success != null ? { create : true } : {}
