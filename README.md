@@ -8,6 +8,30 @@ Terraform module to create an AWS Lambda function.
 > [!IMPORTANT]
 > Exactly one of `var.filename`, `var.image_config.uri`, or `var.s3_bucket` must be specified when using the module.
 
+## Deploying container images outside Terraform
+
+Set `ignore_image_uri_changes = true` to let Terraform set `image_config.uri` only when it creates the function. Later image deployments, for example with `aws lambda update-function-code` from a CI pipeline, are then not reverted by a `terraform apply`.
+
+To switch this on for an existing function without recreating it, add a `moved` block next to the module call (replace `lambda` with your module name):
+
+```hcl
+moved {
+  from = module.lambda.aws_lambda_function.default[0]
+  to   = module.lambda.aws_lambda_function.ignore_image_uri_changes[0]
+}
+```
+
+If the module is called with `for_each` or `count`, add one `moved` block per instance, because `moved` blocks cannot use `for_each` or `[*]`. A block for a key that doesn't exist is ignored, so listing every possible key is safe:
+
+```hcl
+moved {
+  from = module.lambda["key"].aws_lambda_function.default[0]
+  to   = module.lambda["key"].aws_lambda_function.ignore_image_uri_changes[0]
+}
+```
+
+To switch it off again, reverse `from` and `to`. Once it is switched off, the next apply sets the function back to the configured `image_config.uri`.
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -36,6 +60,7 @@ Terraform module to create an AWS Lambda function.
 |------|------|
 | [aws_cloudwatch_log_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_log_group) | resource |
 | [aws_lambda_function.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
+| [aws_lambda_function.ignore_image_uri_changes](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
 | [aws_lambda_function_event_invoke_config.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function_event_invoke_config) | resource |
 | [aws_s3_object.s3_dummy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_object) | resource |
 | [aws_security_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
@@ -63,6 +88,7 @@ Terraform module to create an AWS Lambda function.
 | <a name="input_execution_role_custom"></a> [execution\_role\_custom](#input\_execution\_role\_custom) | Optional existing IAM role for Lambda execution. Overrides the role configured in the execution\_role variable. | <pre>object({<br/>    arn = string<br/>  })</pre> | `null` | no |
 | <a name="input_filename"></a> [filename](#input\_filename) | The path to the function's deployment package within the local filesystem | `string` | `null` | no |
 | <a name="input_handler"></a> [handler](#input\_handler) | The function entrypoint in your code | `string` | `"main.handler"` | no |
+| <a name="input_ignore_image_uri_changes"></a> [ignore\_image\_uri\_changes](#input\_ignore\_image\_uri\_changes) | Set the image URI only on creation and ignore later changes to it, e.g. when images are deployed outside Terraform | `bool` | `false` | no |
 | <a name="input_image_config"></a> [image\_config](#input\_image\_config) | Container image configuration values. The ECR image URI must be a private ECR URI. | <pre>object({<br/>    command           = optional(list(string), [])<br/>    entry_point       = optional(list(string), [])<br/>    uri               = optional(string)<br/>    working_directory = optional(string)<br/>  })</pre> | `null` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS key used to encrypt the cloudwatch log group and environment variables | `string` | `null` | no |
 | <a name="input_layers"></a> [layers](#input\_layers) | List of Lambda layer ARNs to be used by the Lambda function | `list(string)` | `[]` | no |

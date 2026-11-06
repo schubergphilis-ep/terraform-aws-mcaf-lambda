@@ -109,6 +109,18 @@ variable "handler" {
   description = "The function entrypoint in your code"
 }
 
+variable "ignore_image_uri_changes" {
+  type        = bool
+  default     = false
+  nullable    = false
+  description = "Set the image URI only on creation and ignore later changes to it, e.g. when images are deployed outside Terraform"
+
+  validation {
+    condition     = !var.ignore_image_uri_changes || (var.package_type == "Image" && var.image_config != null)
+    error_message = "\"ignore_image_uri_changes\" requires \"package_type\" to be \"Image\" and \"image_config\" to be set."
+  }
+}
+
 variable "image_config" {
   type = object({
     command           = optional(list(string), [])
