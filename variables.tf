@@ -143,6 +143,12 @@ variable "log_retention" {
   description = "Number of days to retain log events in the specified log group"
 }
 
+variable "log_group_skip_destroy" {
+  type        = bool
+  default     = false
+  description = "Keep the log group, and the log events in it, when the module is destroyed: Terraform only removes it from the state"
+}
+
 variable "capacity_provider_config" {
   type = object({
     capacity_provider_arn                     = string

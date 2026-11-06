@@ -20,7 +20,7 @@ module "lambda_role" {
   count = var.execution_role_custom == null ? 1 : 0
 
   source  = "schubergphilis-ep/mcaf-role/aws"
-  version = "~> 0.5.3"
+  version = "~> 0.6.0"
 
   name                  = join("-", compact([var.execution_role.name_prefix, "LambdaRole", var.name]))
   create_policy         = var.execution_role.create_policy
@@ -45,6 +45,7 @@ resource "aws_cloudwatch_log_group" "default" {
   name              = "/aws/lambda/${var.name}"
   kms_key_id        = var.kms_key_arn
   retention_in_days = var.log_retention
+  skip_destroy      = var.log_group_skip_destroy
   tags              = var.tags
 }
 
