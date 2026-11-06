@@ -6,6 +6,7 @@ locals {
   ephemeral_storage          = var.ephemeral_storage_size != null ? { create : true } : {}
   filename                   = var.filename != null ? var.filename : data.archive_file.dummy.output_path
   image_config               = var.image_config != null ? { create : true } : {}
+  lambda_function            = one(concat(aws_lambda_function.default, aws_lambda_function.ignore_image_uri_changes))
   capacity_provider_config   = var.capacity_provider_config != null ? { create : true } : {}
   source_code_hash           = var.source_code_hash != null ? var.source_code_hash : var.filename != null ? filebase64sha256(var.filename) : null
   tracing_config             = var.tracing_config_mode != null ? { create : true } : {}
@@ -117,7 +118,7 @@ resource "aws_lambda_function_event_invoke_config" "default" {
   for_each = local.create_event_invoke_config
 
   region                       = var.region
-  function_name                = aws_lambda_function.default.function_name
+  function_name                = local.lambda_function.function_name
   maximum_event_age_in_seconds = var.maximum_event_age_in_seconds
   maximum_retry_attempts       = var.retries
 
@@ -146,6 +147,8 @@ resource "aws_lambda_function_event_invoke_config" "default" {
 
 // tfsec:ignore:aws-lambda-enable-tracing
 resource "aws_lambda_function" "default" {
+  count = var.ignore_image_uri_changes ? 0 : 1
+
   region                         = var.region
   architectures                  = [var.architecture]
   code_signing_config_arn        = var.code_signing_config_arn
@@ -247,5 +250,118 @@ resource "aws_lambda_function" "default" {
       subnet_ids         = var.subnet_ids
       security_group_ids = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.default[0].id]
     }
+  }
+}
+
+# Copy of aws_lambda_function.default: lifecycle.ignore_changes must be static, so the opt-in needs its own resource.
+// tfsec:ignore:aws-lambda-enable-tracing
+resource "aws_lambda_function" "ignore_image_uri_changes" {
+  count = var.ignore_image_uri_changes ? 1 : 0
+
+  region                         = var.region
+  architectures                  = [var.architecture]
+  code_signing_config_arn        = var.code_signing_config_arn
+  description                    = var.description
+  filename                       = var.s3_bucket == null && var.image_config == null ? local.filename : null
+  function_name                  = var.name
+  handler                        = var.package_type == "Zip" ? var.handler : null
+  image_uri                      = var.image_config != null ? var.image_config.uri : null
+  kms_key_arn                    = var.environment != null ? var.kms_key_arn : null
+  layers                         = var.layers
+  memory_size                    = var.memory_size
+  package_type                   = var.package_type
+  publish                        = var.publish
+  reserved_concurrent_executions = var.reserved_concurrency
+  role                           = var.execution_role_custom != null ? var.execution_role_custom.arn : module.lambda_role[0].arn
+  runtime                        = var.package_type == "Zip" ? var.runtime : null
+  s3_bucket                      = var.s3_bucket
+  s3_key                         = var.s3_key
+  s3_object_version              = var.s3_object_version
+  source_code_hash               = local.source_code_hash
+  tags                           = aws_cloudwatch_log_group.default.tags
+  timeout                        = var.timeout
+
+  dynamic "capacity_provider_config" {
+    for_each = local.capacity_provider_config
+
+    content {
+      lambda_managed_instances_capacity_provider_config {
+        capacity_provider_arn                     = var.capacity_provider_config.capacity_provider_arn
+        execution_environment_memory_gib_per_vcpu = var.capacity_provider_config.execution_environment_memory_gib_per_vcpu
+        per_execution_environment_max_concurrency = var.capacity_provider_config.per_execution_environment_max_concurrency
+      }
+    }
+  }
+
+  dynamic "dead_letter_config" {
+    for_each = local.dead_letter_config
+
+    content {
+      target_arn = var.dead_letter_target_arn
+    }
+  }
+
+  dynamic "durable_config" {
+    for_each = local.durable_config
+
+    content {
+      execution_timeout = var.durable_config.execution_timeout
+      retention_period  = var.durable_config.retention_period
+    }
+  }
+
+  dynamic "environment" {
+    for_each = local.environment
+
+    content {
+      variables = var.environment
+    }
+  }
+
+  dynamic "ephemeral_storage" {
+    for_each = local.ephemeral_storage
+
+    content {
+      size = var.ephemeral_storage_size
+    }
+  }
+
+  dynamic "image_config" {
+    for_each = local.image_config
+
+    content {
+      command           = var.image_config.command
+      entry_point       = var.image_config.entry_point
+      working_directory = var.image_config.working_directory
+    }
+  }
+
+  dynamic "snap_start" {
+    for_each = local.snap_start
+
+    content {
+      apply_on = var.snap_start_apply_on
+    }
+  }
+
+  dynamic "tracing_config" {
+    for_each = local.tracing_config
+
+    content {
+      mode = var.tracing_config_mode
+    }
+  }
+
+  dynamic "vpc_config" {
+    for_each = local.vpc_config
+
+    content {
+      subnet_ids         = var.subnet_ids
+      security_group_ids = length(var.security_group_ids) > 0 ? var.security_group_ids : [aws_security_group.default[0].id]
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [image_uri]
   }
 }

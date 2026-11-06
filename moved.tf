@@ -22,3 +22,8 @@ moved {
   from = aws_cloudwatch_log_group.default[0]
   to   = aws_cloudwatch_log_group.default
 }
+
+moved {
+  from = aws_lambda_function.default
+  to   = aws_lambda_function.default[0]
+}

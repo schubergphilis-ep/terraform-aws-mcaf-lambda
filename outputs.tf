@@ -1,20 +1,20 @@
 output "arn" {
-  value       = aws_lambda_function.default.arn
+  value       = local.lambda_function.arn
   description = "ARN of the Lambda"
 }
 
 output "invoke_arn" {
-  value       = aws_lambda_function.default.invoke_arn
+  value       = local.lambda_function.invoke_arn
   description = "Invoke ARN of the Lambda"
 }
 
 output "name" {
-  value       = aws_lambda_function.default.function_name
+  value       = local.lambda_function.function_name
   description = "Function name of the Lambda"
 }
 
 output "qualified_arn" {
-  value       = aws_lambda_function.default.qualified_arn
+  value       = local.lambda_function.qualified_arn
   description = "Qualified ARN of the Lambda"
 }
 
@@ -24,7 +24,7 @@ output "role_arn" {
 }
 
 output "role_name" {
-  value       = element(split("/", aws_lambda_function.default.role), length(split("/", aws_lambda_function.default.role)) - 1)
+  value       = element(split("/", local.lambda_function.role), length(split("/", local.lambda_function.role)) - 1)
   description = "Name of the lambda execution role"
 }
 
@@ -34,6 +34,6 @@ output "security_group_id" {
 }
 
 output "version" {
-  value       = aws_lambda_function.default.version
+  value       = local.lambda_function.version
   description = "Latest published version of the Lambda function"
 }
