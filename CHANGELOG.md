@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.3.0](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/compare/v4.2.0...v4.3.0) (2026-11-06)
+
+
+### 🚀 Features
+
+* add log_group_skip_destroy to keep the log group on destroy ([#7](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/issues/7)) ([ca4dc0e](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/commit/ca4dc0edc2190b3925ac019d37b1bfb2f4e9416c))
+
 ## [4.2.0](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/compare/v4.1.1...v4.2.0) (2026-08-31)
 
 
