@@ -24,6 +24,7 @@ module "lambda_role" {
 
   name                  = join("-", compact([var.execution_role.name_prefix, "LambdaRole", var.name]))
   create_policy         = var.execution_role.create_policy
+  description           = var.execution_role.description
   path                  = var.execution_role.path
   permissions_boundary  = var.execution_role.permissions_boundary
   postfix               = false
