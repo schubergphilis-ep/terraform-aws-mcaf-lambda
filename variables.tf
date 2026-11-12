@@ -70,6 +70,7 @@ variable "execution_role" {
   type = object({
     additional_policy_arns = optional(set(string), [])
     create_policy          = optional(bool)
+    description            = optional(string)
     name_prefix            = optional(string)
     path                   = optional(string, "/")
     permissions_boundary   = optional(string)
