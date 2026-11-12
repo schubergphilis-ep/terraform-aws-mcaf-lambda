@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [4.4.0](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/compare/v4.3.0...v4.4.0) (2026-11-12)
+
+
+### 🚀 Features
+
+* add execution_role.description to set the IAM role description ([#10](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/issues/10)) ([23bc8aa](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/commit/23bc8aaec716b155d83c6265f1883f938a06585a))
+
 ## [4.3.0](https://github.com/schubergphilis-ep/terraform-aws-mcaf-lambda/compare/v4.2.0...v4.3.0) (2026-11-06)
 
 
